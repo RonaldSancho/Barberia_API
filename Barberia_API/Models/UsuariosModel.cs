@@ -29,5 +29,15 @@ namespace Barberia_API.Models
                     }, commandType: System.Data.CommandType.StoredProcedure);
             }
         }
+
+        public UsuariosEntities? ValidarCorreoElectronico(string CorreoElectronico)
+        {
+            using(var conexion = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                return conexion.Query<UsuariosEntities>("ValidarCorreoElectronico",
+                    new { CorreoElectronico },
+                    commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+            }
+        }
     }
 }

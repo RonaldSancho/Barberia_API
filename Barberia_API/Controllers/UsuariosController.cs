@@ -33,5 +33,25 @@ namespace Barberia_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("RegistrarUsuario")]
+        public IActionResult ValidarCorreoElectronico(string q)
+        {
+            try
+            {
+                var resultado = _usuariosModel.ValidarCorreoElectronico(q);
+                if (resultado != null)
+                    return Ok(resultado);
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
