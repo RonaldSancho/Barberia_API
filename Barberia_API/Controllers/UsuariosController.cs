@@ -3,6 +3,10 @@ using Barberia_API.Interfeces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
+using MimeKit.Text;
+using MailKit.Net.Smtp;
+
 
 namespace Barberia_API.Controllers
 {
@@ -12,6 +16,7 @@ namespace Barberia_API.Controllers
     [AllowAnonymous]
     public class UsuariosController : ControllerBase
     {
+
         //inyección de dependencias
         private readonly IUsuariosModel _usuariosModel;
         private readonly IConfiguration _configuration;
@@ -73,6 +78,83 @@ namespace Barberia_API.Controllers
             }
             else
                 return NotFound();
+        }
+
+        //Peticion HttpPost que permite al usuario recuperar su contraseña
+        [HttpPost]
+        [Route("RecuperarContrasenna")]
+        public IActionResult RecuperarContrasenna(UsuariosEntities usuario)
+        {
+            var resultado = _usuariosModel.RecuperarContrasenna(usuario);
+
+            string EmailRemitente = _configuration.GetSection("EmailConfiguracion:EmailRemitente").Value;
+            string Titulo = _configuration.GetSection("EmailConfiguracion:Titulo").Value;
+            string Contraseña = _configuration.GetSection("EmailConfiguracion:Contraseña").Value;
+            string Host = _configuration.GetSection("EmailConfiguracion:Host").Value;
+            string Puerto = _configuration.GetSection("EmailConfiguracion:Puerto").Value;
+
+            var email = new MimeMessage();
+            email.From.Add(MailboxAddress.Parse(EmailRemitente));
+            email.To.Add(MailboxAddress.Parse(usuario.CorreoElectronico));
+            email.Subject = Titulo;
+            email.Body = new TextPart(TextFormat.Html)
+            { Text = @"
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                background-color: #f4f4f4;
+                                margin: 0;
+                                padding: 0;
+                            }
+                            .container {
+                                max-width: 600px;
+                                margin: 20px auto;
+                                padding: 20px;
+                                background-color: #ffffff;
+                                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+                            }
+                            h1 {
+                                color: #333333;
+                            }
+                            p {
+                                color: #666666;
+                            }
+                            .footer {
+                                text-align: center;
+                                margin-top: 20px;
+                                padding-top: 20px;
+                                border-top: 1px solid #dddddd;
+                                color: #999999;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class='container'>
+                            <h1>Recuperación de Contraseña</h1>
+                            <p>Estimado usuario,</p>
+                            <p>Hemos recibido una solicitud para recuperar la contraseña asociada a tu cuenta. A continuación, encontrarás tus detalles de inicio de sesión:</p>
+                            <p><strong>Correo electrónico:</strong> " + resultado?.CorreoElectronico + @"</p>
+                            <p><strong>Contraseña:</strong> " + resultado?.Contraseña + @"</p>
+                            <p>Por razones de seguridad, te recomendamos cambiar tu contraseña después de iniciar sesión.</p>
+                            <p>¡Gracias por confiar en nosotros!</p>
+                            <div class='footer'>
+                                <p>No responder a este correo.</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>"
+            };
+
+            using var smtp = new SmtpClient();
+            smtp.Connect(Host, int.Parse(Puerto), true);
+            smtp.Authenticate(EmailRemitente, Contraseña);
+            smtp.Send(email);
+            smtp.Disconnect(true);
+
+            return Ok();
         }
     }
 }
