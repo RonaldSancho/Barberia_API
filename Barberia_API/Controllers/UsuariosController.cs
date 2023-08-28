@@ -8,9 +8,11 @@ namespace Barberia_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //Se declara AllowAnonymous para poder ingresar a cada metodo sin tener que estar registrado
     [AllowAnonymous]
     public class UsuariosController : ControllerBase
     {
+        //inyección de dependencias
         private readonly IUsuariosModel _usuariosModel;
         private readonly IConfiguration _configuration;
 
@@ -20,6 +22,7 @@ namespace Barberia_API.Controllers
             _configuration = configuration;
         }
 
+        //Peticion HttpPost que permite ingresar usuarios
         [HttpPost]
         [Route("RegistrarUsuario")]
         public IActionResult RegistrarUsuario(UsuariosEntities usuario) 
@@ -34,8 +37,9 @@ namespace Barberia_API.Controllers
             }
         }
 
+        //Peticion HttpGet que permite validar si el correo existe
         [HttpGet]
-        [Route("RegistrarUsuario")]
+        [Route("ValidarCorreoElectronico")]
         public IActionResult ValidarCorreoElectronico(string q)
         {
             try
@@ -52,6 +56,23 @@ namespace Barberia_API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        //Peticion HttpPost que permite validar si el usuario existe
+        [HttpPost]
+        [Route("ValidarUsuario")]
+        public IActionResult ValidarUsuario(UsuariosEntities usuario)
+        {
+            var resultado = _usuariosModel.ValidarUsuario(usuario);
+
+            if (resultado != null)
+            {
+                //se genera un token para identificar al usuario
+                resultado.Token = _usuariosModel.GenerarToken(resultado.CorreoElectronico);
+                return Ok(resultado);
+            }
+            else
+                return NotFound();
         }
     }
 }
