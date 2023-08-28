@@ -120,7 +120,7 @@ namespace Barberia_API.Controllers
                                 color: #333333;
                             }
                             p {
-                                
+                                color: #666666;
                             }
                             .footer {
                                 text-align: center;
