@@ -117,7 +117,7 @@ namespace Barberia_API.Controllers
                                 box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
                             }
                             h1 {
-                                color: #333333;
+                                
                             }
                             p {
                                 color: #666666;
