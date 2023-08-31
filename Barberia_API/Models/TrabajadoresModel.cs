@@ -32,5 +32,46 @@ namespace Barberia_API.Models
                     }, commandType: System.Data.CommandType.StoredProcedure);
             }
         }
+
+        //metodo que consulta la lista de trabajadores
+        public List<TrabajadoresEntities> ConsultaTrabajadores()
+        {
+            using (var conexion = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                return conexion.Query<TrabajadoresEntities>("ConsultaTrabajadores",
+                    new {},
+                    commandType: System.Data.CommandType.StoredProcedure).ToList();
+            }
+        }
+
+        //metodo que consulta a un trabajador en específico
+        public TrabajadoresEntities? ConsultaTrabajador(int IdTrabajador)
+        {
+            using (var conexion = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                return conexion.Query<TrabajadoresEntities>("ConsultaTrabajador",
+                    new { IdTrabajador },
+                    commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+            }
+        }
+
+        public void EditarTrabajador(TrabajadoresEntities trabajador)
+        {
+            using (var conexion = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                conexion.Execute("EditarTrabajador",
+                    new
+                    {
+                        trabajador.IdTrabajador,
+                        trabajador.BioTrabajador,
+                        trabajador.NombreTrabajador,
+                        trabajador.ApellidosTrabajador,
+                        trabajador.TelefonoTrabajador,
+                        trabajador.Estado,
+                        trabajador.ImagenTrabajador,
+                        trabajador.TipoUsuario
+                    }, commandType: System.Data.CommandType.StoredProcedure);
+            }
+        }
     }
 }

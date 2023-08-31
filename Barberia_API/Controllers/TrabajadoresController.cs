@@ -38,5 +38,62 @@ namespace Barberia_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        //Peticion HttpGet que permite consultar una lista de trabajadores
+        [HttpGet]
+        [Route("ConsultaTrabajadores")]
+        public IActionResult ConsultaTrabajadores()
+        {
+            try
+            {
+                var resultado = _trabajadoresModel.ConsultaTrabajadores();
+                if (resultado.Count > 0)
+                    return Ok(resultado);
+                else
+                    return NotFound();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //Peticion HttpGet que permite consultar a un trabajador por su ID
+        [HttpGet]
+        [Route("ConsultaTrabajador")]
+        public IActionResult ConsultaTrabajador(int id)
+        {
+            try
+            {
+                var resultado = _trabajadoresModel.ConsultaTrabajador(id);
+
+                if (resultado != null)
+                    return Ok(resultado);
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //Peticion HttpPut que permite actualizar trabajadores
+        [HttpPut]
+        [Route("EditarTrabajador")]
+        public IActionResult EditarTrabajador(TrabajadoresEntities trabajador)
+        {
+            try
+            {
+                _trabajadoresModel.EditarTrabajador(trabajador);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
