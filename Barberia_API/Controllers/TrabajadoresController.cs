@@ -95,5 +95,20 @@ namespace Barberia_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        //Peticion HttpDelete que permite Eliminar trabajadores
+        [HttpDelete]
+        [Route("EliminarTrabajador")]
+        public IActionResult EliminarTrabajador(int id)
+        {
+            try
+            {
+                return Ok(_trabajadoresModel.EliminarTrabajador(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

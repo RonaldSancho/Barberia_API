@@ -55,6 +55,7 @@ namespace Barberia_API.Models
             }
         }
 
+        //metodo que edita a un trabajador en específico
         public void EditarTrabajador(TrabajadoresEntities trabajador)
         {
             using (var conexion = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
@@ -71,6 +72,17 @@ namespace Barberia_API.Models
                         trabajador.ImagenTrabajador,
                         trabajador.TipoUsuario
                     }, commandType: System.Data.CommandType.StoredProcedure);
+            }
+        }
+
+        //metodo que elimina a un trabajador en específico
+        public int EliminarTrabajador(int idTrabajador)
+        {
+            using (var conexion = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                return conexion.Execute("EliminarTrabajador",
+                    new { idTrabajador }, 
+                    commandType: System.Data.CommandType.StoredProcedure);
             }
         }
     }
