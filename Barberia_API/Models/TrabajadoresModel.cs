@@ -68,7 +68,7 @@ namespace Barberia_API.Models
                         trabajador.NombreTrabajador,
                         trabajador.ApellidosTrabajador,
                         trabajador.TelefonoTrabajador,
-                        trabajador.Estado,
+                        trabajador.EstadoTrabajador,
                         trabajador.ImagenTrabajador,
                         trabajador.TipoUsuario
                     }, commandType: System.Data.CommandType.StoredProcedure);

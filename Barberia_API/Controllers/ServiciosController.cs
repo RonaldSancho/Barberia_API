@@ -37,5 +37,47 @@ namespace Barberia_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        //Peticion HttpGet que permite consultar una lista de servicios
+        [HttpGet]
+        [Route("ConsultaServicios")]
+        public IActionResult ConsultaServicios()
+        {
+            try
+            {
+                var resultado = _serviciosModel.ConsultaServicios();
+                if (resultado.Count > 0)
+                    return Ok(resultado);
+                else
+                    return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //Peticion HttpGet que permite consultar a servicio por su ID
+        [HttpGet]
+        [Route("ConsultaServicio")]
+        public IActionResult ConsultaServicio(int id)
+        {
+            try
+            {
+                var resultado = _serviciosModel.ConsultaServicio(id);
+
+                if (resultado != null)
+                    return Ok(resultado);
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

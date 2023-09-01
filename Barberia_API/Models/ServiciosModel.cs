@@ -30,5 +30,27 @@ namespace Barberia_API.Models
                     }, commandType: System.Data.CommandType.StoredProcedure);
             }
         }
+
+        //metodo que consulta la lista de servicios
+        public List<ServiciosEntities> ConsultaServicios()
+        {
+            using (var conexion = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                return conexion.Query<ServiciosEntities>("ConsultaServicios",
+                    new { },
+                    commandType: System.Data.CommandType.StoredProcedure).ToList();
+            }
+        }
+
+        //metodo que consulta un servicio en específico
+        public ServiciosEntities? ConsultaServicio(int IdServicio)
+        {
+            using (var conexion = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                return conexion.Query<ServiciosEntities>("ConsultaServicio",
+                    new { IdServicio },
+                    commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+            }
+        }
     }
 }

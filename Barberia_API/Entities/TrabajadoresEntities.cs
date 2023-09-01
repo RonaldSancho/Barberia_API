@@ -9,7 +9,7 @@
         public string NombreTrabajador { get; set; } = string.Empty;
         public string ApellidosTrabajador { get; set; } = string.Empty;
         public int TelefonoTrabajador { get; set; }
-        public bool Estado { get; set; }
+        public bool EstadoTrabajador { get; set; }
         public string ImagenTrabajador { get; set; } = string.Empty;
         public int TipoUsuario { get; set; }
     }

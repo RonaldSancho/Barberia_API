@@ -5,7 +5,8 @@
         public long IdServicio { get; set; }
         public string ServicioNombre { get; set; } = string.Empty;
         public string ServicioDetalle { get; set; } = string.Empty;
-        public bool Estado { get; set; }
+        public string NombreTrabajador { get; set; } = string.Empty;
+        public bool ServicioEstado { get; set; }
         public string ServicioImagen { get; set; } = string.Empty;
         public long IdTrabajador { get; set; }
     }
