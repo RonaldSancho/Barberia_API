@@ -17,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 //inyección de dependencias
 builder.Services.AddScoped<IUsuariosModel, UsuariosModel>();
 builder.Services.AddScoped<ITrabajadoresModel, TrabajadoresModel>();
+builder.Services.AddScoped<IServiciosModel, ServiciosModel>();
 
 builder.Services.AddSwaggerGen();
 
